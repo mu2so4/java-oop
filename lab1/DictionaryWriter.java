@@ -1,39 +1,32 @@
 package lab1;
 
-import java.util.Iterator;
-import java.util.TreeSet;
 import java.io.*;
 
 public class DictionaryWriter {
-    private final String fileName;
 
-    public DictionaryWriter(String fileName) {
-        this.fileName = fileName;
+    private String wordDoCSV(Word word, int dictionarySize) {
+        return word.getLexeme() + "\t" + word.getFrequency() + "\t" +
+                String.format("%.2f%%\n", 100. * word.getFrequency() / dictionarySize);
     }
 
-    void write(Dictionary dictionary) {
-        int size = dictionary.getDictionarySize();
-        TreeSet<Pair<Integer, String>> stats = dictionary.getDescendingDictionary();
-
+    void write(Dictionary dictionary, String outputFileName) {
         Writer writer = null;
         try {
-            writer = new OutputStreamWriter(new FileOutputStream(fileName));
-            Iterator<Pair<Integer, String>> descendingIterator = stats.descendingIterator();
-            while(descendingIterator.hasNext()) {
-                Pair<Integer, String> pair = descendingIterator.next();
-                writer.write(pair.getValue() + "\t" + pair.getKey() + "\t" +
-                         String.format("%.2f%%\n", 100. * pair.getKey() / size));
-            }
+            writer = new OutputStreamWriter(new FileOutputStream(outputFileName));
+            Word[] words = dictionary.getDescendingDictionary();
+            int size = words.length;
+            for(Word word: words)
+                writer.write(wordDoCSV(word, size));
         }
         catch (IOException e) {
             System.err.println("Error while writing file: " + e.getLocalizedMessage());
         }
         finally {
-            if (null != writer) {
+            if(null != writer) {
                 try {
                     writer.close();
                 }
-                catch (IOException e) {
+                catch(IOException e) {
                     e.printStackTrace(System.err);
                 }
             }

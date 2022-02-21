@@ -1,48 +1,49 @@
 package lab1;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 
 public class DictionaryReader {
-    private final String fileName;
+    private boolean hasNext = true;
 
-    public DictionaryReader(String fileName) {
-        this.fileName = fileName;
+    private String parse(Reader reader) throws IOException {
+        StringBuilder str = new StringBuilder();
+        int ch = reader.read();
+        hasNext = -1 != ch;
+        while(!Character.isLetterOrDigit(ch) && -1 != ch)
+            ch = reader.read();
+        for(; ch != -1; ch = reader.read()) {
+            if(Character.isLetterOrDigit(ch)) {
+                ch = Character.toLowerCase(ch);
+                str.append((char) ch);
+            }
+            else break;
+        }
+        return str.toString();
     }
 
-    public void read(Dictionary dictionary) {
+    public Dictionary read(String inputFileName) {
+        Dictionary dictionary = new Dictionary();
         Reader reader = null;
         try {
-            reader = new InputStreamReader(new FileInputStream(fileName));
-            StringBuilder str = new StringBuilder();
-            for(int ch = reader.read(); ch != -1; ch = reader.read()) {
-                if(Character.isLetterOrDigit(ch)) {
-                    ch = Character.toLowerCase(ch);
-                    str.append((char) ch);
-                }
-
-                else if(str.length() != 0) {
-                    dictionary.insert(str.toString());
-                    str.setLength(0);
-                }
+            reader = new InputStreamReader(new FileInputStream(inputFileName));
+            while(hasNext) {
+                dictionary.insert(parse(reader));
             }
-            if(!str.toString().equals(""))
-                dictionary.insert(str.toString());
         }
         catch (IOException e) {
             System.err.println("Error while reading file: " + e.getLocalizedMessage());
         }
         finally {
-            if (null != reader) {
+            if(null != reader) {
                 try {
                     reader.close();
                 }
-                catch (IOException e) {
+                catch(IOException e) {
                     e.printStackTrace(System.err);
                 }
             }
         }
+
+        return dictionary;
     }
 }

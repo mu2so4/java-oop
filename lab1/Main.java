@@ -15,10 +15,9 @@ public class Main {
             inputFileName = args[0];
             outputFileName = args[1];
         }
-        Dictionary dictionary = new Dictionary();
-        DictionaryReader reader = new DictionaryReader(inputFileName);
-        reader.read(dictionary);
-        DictionaryWriter writer = new DictionaryWriter(outputFileName);
-        writer.write(dictionary);
+        DictionaryReader reader = new DictionaryReader();
+        Dictionary dictionary = reader.read(inputFileName);
+        DictionaryWriter writer = new DictionaryWriter();
+        writer.write(dictionary, outputFileName);
     }
 }
