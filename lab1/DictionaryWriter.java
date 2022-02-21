@@ -9,7 +9,7 @@ public class DictionaryWriter {
                 String.format("%.2f%%\n", 100. * word.getFrequency() / dictionarySize);
     }
 
-    void write(Dictionary dictionary, String outputFileName) {
+    public void write(Dictionary dictionary, String outputFileName) {
         Writer writer = null;
         try {
             writer = new OutputStreamWriter(new FileOutputStream(outputFileName));
