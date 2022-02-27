@@ -14,7 +14,7 @@ public class DictionaryWriter {
         try {
             writer = new OutputStreamWriter(new FileOutputStream(outputFileName));
             Word[] words = dictionary.getDescendingDictionary();
-            int size = words.length;
+            int size = dictionary.getDictionarySize();
             for(Word word: words)
                 writer.write(wordDoCSV(word, size));
         }

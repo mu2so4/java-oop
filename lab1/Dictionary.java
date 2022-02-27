@@ -28,12 +28,8 @@ public class Dictionary {
 		});
 		return desc;
 	}
-	
+
 	public int getDictionarySize() {
 		return wordsCount;
-	}
-
-	public Set<Word> getFrequencyDictionary() {
-		return words;
 	}
 }

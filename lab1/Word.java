@@ -25,21 +25,4 @@ public class Word implements Comparable<Word> {
     public int compareTo(Word word) {
         return lexeme.compareTo(word.lexeme);
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if(obj == this)
-            return true;
-        if(obj == null)
-            return false;
-        if(!(obj instanceof Word))
-            return false;
-        Word p = (Word) obj;
-        return lexeme.equals(p.lexeme);
-    }
-
-    @Override
-    public String toString() {
-        return lexeme + "\t" + frequency;
-    }
 }

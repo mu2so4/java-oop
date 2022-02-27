@@ -5,7 +5,7 @@ import java.io.*;
 public class DictionaryReader {
     private boolean hasNext = true;
 
-    private String parse(Reader reader) throws IOException {
+    private String nextWord(Reader reader) throws IOException {
         StringBuilder str = new StringBuilder();
         int ch = reader.read();
         hasNext = -1 != ch;
@@ -22,12 +22,13 @@ public class DictionaryReader {
     }
 
     public Dictionary read(String inputFileName) {
+        hasNext = true;
         Dictionary dictionary = new Dictionary();
         Reader reader = null;
         try {
             reader = new InputStreamReader(new FileInputStream(inputFileName));
             while(hasNext) {
-                dictionary.insert(parse(reader));
+                dictionary.insert(nextWord(reader));
             }
         }
         catch (IOException e) {
