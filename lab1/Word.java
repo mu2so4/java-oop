@@ -20,6 +20,21 @@ public class Word implements Comparable<Word> {
     public void setFrequency(int frequency) {
         this.frequency = frequency;
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj == null || getClass() != obj.getClass())
+            return false;
+        Word word2 = (Word) obj;
+        return lexeme.equals(word2.lexeme);
+    }
+    
+    @Override
+    public int hashCode() {
+        return lexeme.hashCode();
+    }
 
     @Override
     public int compareTo(Word word) {

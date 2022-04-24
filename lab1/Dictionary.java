@@ -9,11 +9,11 @@ public class Dictionary {
 	public void insert(String word) {
 		if(word.equals(""))
 			return;
-		Word candidate = new Word(word), p = words.floor(candidate);
-		if(p == null || !word.equals(p.getLexeme()))
+		Word candidate = new Word(word), found = words.floor(candidate);
+		if(found == null || !word.equals(found.getLexeme()))
 			words.add(candidate);
 		else
-			p.setFrequency(p.getFrequency() + 1);
+			found.setFrequency(found.getFrequency() + 1);
 		wordsCount++;
 	}
 
