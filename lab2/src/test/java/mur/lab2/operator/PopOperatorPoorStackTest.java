@@ -25,7 +25,7 @@ public class PopOperatorPoorStackTest {
             assertDoesNotThrow(() -> operator.run(context, null));
         }
         for(int index = 0; index < NUMBER_EXCEED_COUNT; index++) {
-            assertThrows(EmptyStackException.class, () -> operator.run(context, null));
+            assertThrows(OperatorTooFewElementsInStackException.class, () -> operator.run(context, null));
         }
     }
 }
