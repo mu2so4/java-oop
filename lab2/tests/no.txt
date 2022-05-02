@@ -1,0 +1,8 @@
+DEFINE abba 11
+PUSH abba
+# provoke stack error
++
+PUSH 14
++
+PRINT
+POPQ

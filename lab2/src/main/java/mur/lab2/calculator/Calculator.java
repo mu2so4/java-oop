@@ -1,47 +1,41 @@
-package mur.lab3.calculator;
+package mur.lab2.calculator;
 
-import mur.lab3.operator.*;
+import mur.lab2.operator.*;
 
-import java.util.HashMap;
+import java.io.IOException;
+import java.util.Map;
 import java.util.logging.*;
 
 public class Calculator {
     private final Context context = new Context();
-    private final HashMap<String, Operator> operators = new HashMap<>();
+    private final Map<String, Operator> operators;
     private final Logger calculatorLogger = Logger.getLogger(Calculator.class.getCanonicalName());
 
-    public void addOperator(String commandName, String fullClassName) {
-        try {
-            operators.put(commandName, OperatorFactory.newInstance(fullClassName));
-            calculatorLogger.fine(fullClassName + " loaded as command " + commandName);
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | ClassCastException e) {
-            calculatorLogger.log(Level.SEVERE, "loading " + fullClassName + " failed", e);
-        }
+    public Calculator(String configResource)
+            throws IOException {
+        operators = OperatorFactory.loadCommandsFromResource(configResource);
+        //calculatorLogger.removeHandler(calculatorLogger.getHandlers()[0]);
     }
 
     Operator getOperator(String commandName) throws NoSuchOperatorException {
         Operator operator = operators.get(commandName);
         if(operator == null)
-            throw new NoSuchOperatorException("operator " + commandName + " not found");
+            throw new NoSuchOperatorException(String.format("operator %s not found", commandName));
         return operator;
     }
 
-    public double execute(Command command) {
-        String commandName = command.getCommandName();
+    public double execute(Query query) {
+        String commandName = query.getCommandName();
         Operator operator;
         double result = Double.NaN;
 
         try {
             operator = getOperator(commandName);
-            result = operator.run(context, command.getArgs());
-            calculatorLogger.fine(commandName + "\tperformed with result " + result + "\n");
+            result = operator.run(context, query.getArgs());
+            calculatorLogger.info(String.format("%s\tperformed with result %f", commandName, result));
         }
-        catch(NoSuchOperatorException e) {
-            calculatorLogger.log(Level.SEVERE, commandName + ": command not found", e);
-        }
-        catch(Exception e) {
-            calculatorLogger.log(Level.SEVERE, "got exception from command "
-                    + commandName, e);
+        catch(OperatorException e) {
+            calculatorLogger.log(Level.SEVERE, commandName, e);
         }
         return result;
     }

@@ -1,6 +1,6 @@
-package mur.lab3.operator;
+package mur.lab2.operator;
 
-public class NoSuchOperatorException extends Exception {
+public class NoSuchOperatorException extends OperatorException {
     public NoSuchOperatorException(String message) {
         super(message);
     }

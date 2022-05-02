@@ -1,6 +1,6 @@
-package mur.lab3.operator;
+package mur.lab2.operator;
 
-import mur.lab3.calculator.Context;
+import mur.lab2.calculator.Context;
 
 public class SkipOperator implements Operator {
     @Override

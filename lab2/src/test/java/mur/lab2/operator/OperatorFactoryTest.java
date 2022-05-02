@@ -1,33 +1,28 @@
-package mur.lab3.operator;
+package mur.lab2.operator;
 
-import mur.lab3.calculator.Calculator;
-import mur.lab3.calculator.Command;
-import mur.lab3.calculator.Context;
+import mur.lab2.calculator.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.io.IOException;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class OperatorFactoryTest {
-    @Test
+    @ParameterizedTest
+    @ValueSource(classes = {DefineOperator.class, DivideOperator.class, MinusOperator.class,
+            MultiplyOperator.class, PlusOperator.class, PopOperator.class, PushOperator.class,
+            SkipOperator.class, SkipOperator.class, SqrtOperator.class})
     @DisplayName("instance all our operators")
-    void normalInstance() {
-        Class[] classes = {DefineOperator.class, DivideOperator.class, MinusOperator.class,
-                MultiplyOperator.class, PlusOperator.class, PopOperator.class, PushOperator.class,
-                SkipOperator.class, SkipOperator.class, SqrtOperator.class};
-        for(Class cl: classes) {
-            assertDoesNotThrow(() -> OperatorFactory.newInstance(cl.getCanonicalName()));
-        }
+    void normalInstance(Class<Operator> operatorClass) {
+            assertDoesNotThrow(() -> OperatorFactory.newInstance(operatorClass.getCanonicalName()));
     }
 
     @Test
-    @DisplayName("instance other classes")
-    void instanceOtherClasses() {
-        assertThrows(InstantiationException.class,
-                () -> OperatorFactory.newInstance(Command.class.getCanonicalName()));
-        assertThrows(ClassCastException.class,
-                () -> OperatorFactory.newInstance(Calculator.class.getCanonicalName()));
-        assertThrows(ClassCastException.class,
-                () -> OperatorFactory.newInstance(Context.class.getCanonicalName()));
-        assertThrows(ClassNotFoundException.class,
-                () -> OperatorFactory.newInstance(SqrtOperator.class.getSimpleName()));
+    @DisplayName("with reading from a resource")
+    void read() throws IOException {
+        Map<String, Operator> operators = OperatorFactory.loadCommandsFromResource("operators.conf");
     }
 }

@@ -1,10 +1,10 @@
-package mur.lab3.calculator;
+package mur.lab2.calculator;
 
-public class Command {
+public class Query {
     private final String commandName;
     private final String[] args;
 
-    public Command(String command, String[] args) {
+    public Query(String command, String[] args) {
         this.commandName = command;
         this.args = args;
     }

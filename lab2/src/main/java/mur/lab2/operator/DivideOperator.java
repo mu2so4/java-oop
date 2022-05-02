@@ -1,27 +1,31 @@
-package mur.lab3.operator;
+package mur.lab2.operator;
 
-import mur.lab3.calculator.Context;
-
-import java.util.EmptyStackException;
+import mur.lab2.calculator.*;
 
 public class DivideOperator implements Operator {
     @Override
-    public double run(Context context, String[] args) {
+    public double run(Context context, String[] args)
+            throws OperatorException {
         if(args != null && args.length != 0)
-            throw new IllegalArgumentException("operator " +
-                    getClass().getCanonicalName() + " must have no arguments\n");
+            throw new OperatorIllegalArgumentCountException("operator " +
+                    getClass().getCanonicalName() + " must have no arguments");
         double num1, num2;
-        num1 = context.pop();
+        try {
+            num1 = context.pop();
+        }
+        catch(ContextEmptyStackException e) {
+            throw new OperatorTooFewElementsInStackException();
+        }
         try {
             num2 = context.pop();
         }
-        catch(EmptyStackException e) {
+        catch(ContextEmptyStackException e) {
             context.push(num1);
-            throw new IllegalStateException("division with one operator on the stack");
+            throw new OperatorTooFewElementsInStackException();
         }
         double result = context.push(num2 / num1);
         if(num1 == 0)
-            throw new ArithmeticException("division by zero");
+            throw new OperatorDivideByZeroException();
         return result;
     }
 }

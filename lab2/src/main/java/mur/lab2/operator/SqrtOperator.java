@@ -1,17 +1,23 @@
-package mur.lab3.operator;
+package mur.lab2.operator;
 
-import mur.lab3.calculator.Context;
+import mur.lab2.calculator.*;
 
 public class SqrtOperator implements Operator {
     @Override
-    public double run(Context context, String[] args) {
+    public double run(Context context, String[] args) throws OperatorException {
         if(args != null && args.length != 0)
-            throw new IllegalArgumentException("operator " +
-                    getClass().getCanonicalName() + " must have no arguments\n");
-        double num = context.pop();
+            throw new OperatorIllegalArgumentCountException("operator " +
+                    getClass().getCanonicalName() + " must have no arguments");
+        double num;
+        try {
+            num = context.pop();
+        }
+        catch(ContextEmptyStackException e) {
+            throw new OperatorTooFewElementsInStackException(e);
+        }
         double result = context.push(Math.sqrt(num));
         if(num < 0)
-            throw new ArithmeticException("sqrt of negative number");
+            throw new OperatorNegativeSqrtException();
         return result;
     }
 }

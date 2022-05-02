@@ -1,8 +1,6 @@
-package mur.lab3.calculator;
+package mur.lab2.calculator;
 
-import java.util.HashMap;
-import java.util.NoSuchElementException;
-import java.util.Stack;
+import java.util.*;
 
 public class Context {
     private final HashMap<String, Double> defines = new HashMap<>();
@@ -12,20 +10,28 @@ public class Context {
         return stack.push(item);
     }
 
-    public double pop() {
-        return stack.pop();
+    public double pop() throws ContextEmptyStackException {
+        try {
+            return stack.pop();
+        }
+        catch(EmptyStackException e) {
+            throw new ContextEmptyStackException(e);
+        }
     }
 
-    public double define(String label, double value) {
+    public double define(String label, double value) throws IllegalLabelException {
         if(Character.isDigit(label.charAt(0)))
-            throw new IllegalArgumentException("label " + label + " cannot start with a digit");
+            throw new IllegalLabelException(label);
         defines.put(label, value);
         return value;
     }
 
-    public double getDouble(String label) {
-        if(!defines.containsKey(label))
-            throw new NoSuchElementException("label \"" + label + "\" not found\n");
-        return defines.get(label);
+    public double getDouble(String label) throws ContextLabelNotFoundException {
+        try {
+            return defines.get(label);
+        }
+        catch(NullPointerException e) {
+            throw new ContextLabelNotFoundException(label);
+        }
     }
 }

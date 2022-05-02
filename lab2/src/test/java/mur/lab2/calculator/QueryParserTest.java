@@ -1,4 +1,4 @@
-package mur.lab3.calculator;
+package mur.lab2.calculator;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.Random;
 
-public class CommandParserTest {
+public class QueryParserTest {
     private static final int ITERATION_COUNT = 15;
     private static final int MIN_ARG_COUNT = 0;
     private static final int MAX_ARG_COUNT = 6;
@@ -32,18 +32,18 @@ public class CommandParserTest {
     @DisplayName("Read and parse commands")
     void parseCommand() {
         try {
-            final String fileName = "cmd1.txt";
-            CommandParser parser = new CommandParser(fileName);
-            Command[] commands = parser.readAllCommands();
-            for(Command command: commands)
-                System.out.println(command);
+            final String fileName = "tests/cmd1.txt";
+            QueryParser parser = new QueryParser(fileName);
+            Query[] queries = parser.readAllCommands();
+            for(Query query : queries)
+                System.out.println(query);
             System.out.println();
             parser.close();
 
-            parser = new CommandParser(fileName);
-            commands = parser.readAllCommands();
-            for(Command command: commands)
-                System.out.println(command);
+            parser = new QueryParser(fileName);
+            queries = parser.readAllCommands();
+            for(Query query : queries)
+                System.out.println(query);
             parser.close();
         }
         catch(IOException e) {
@@ -76,11 +76,11 @@ public class CommandParserTest {
             }
 
             try {
-                CommandParser parser = new CommandParser(fileName);
-                Command[] parsedCommands = parser.readAllCommands();
-                assertEquals(commands.length, parsedCommands.length);
+                QueryParser parser = new QueryParser(fileName);
+                Query[] parsedQueries = parser.readAllCommands();
+                assertEquals(commands.length, parsedQueries.length);
                 for(int index = 0; index < commands.length; index++)
-                    assertEquals(commands[index], parsedCommands[index].toString());
+                    assertEquals(commands[index], parsedQueries[index].toString());
                 parser.close();
             }
             catch(IOException e) {
