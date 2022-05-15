@@ -2,11 +2,20 @@ package mur.lab2;
 
 import mur.lab2.calculator.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
+import java.util.logging.LogManager;
 
 public class Main {
     public static void main(String[] args) {
+        try(InputStream stream = Calculator.class.getClassLoader().
+                getResourceAsStream("logging.properties")) {
+            LogManager.getLogManager().readConfiguration(stream);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         Calculator calculator;
         try {
             calculator = new Calculator("operators.conf");

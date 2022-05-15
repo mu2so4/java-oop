@@ -17,18 +17,12 @@ public class OperatorFactory {
                     command = parser.nextCommand();
                     if(command == null)
                         break;
+                    operators.put(command.getCommandName(), newInstance(command.getFullClassName()));
                     factoryLogger.info(String.format("%s\tloaded as %s",
                             command.getFullClassName(), command.getCommandName()));
                 }
-                catch(CommandConfigFileException e) {
-                    factoryLogger.log(Level.SEVERE, e.getMessage(), e);
-                    continue;
-                }
-                try {
-                    operators.put(command.getCommandName(), newInstance(command.getFullClassName()));
-                }
                 catch(Exception e) {
-                    factoryLogger.log(Level.SEVERE, e.getMessage(), e);
+                    factoryLogger.log(Level.SEVERE, String.format("%s: %s", e.getClass().getCanonicalName(), e.getMessage()));
                 }
             }
         }
@@ -37,7 +31,8 @@ public class OperatorFactory {
 
     public static Operator newInstance(String fullClassName)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Object obj = Class.forName(fullClassName).newInstance();
+        Object obj;
+        obj = Class.forName(fullClassName).newInstance();
         if(!(obj instanceof Operator))
             throw new ClassCastException(fullClassName +
                     " is not a subclass for " + Operator.class.getCanonicalName());

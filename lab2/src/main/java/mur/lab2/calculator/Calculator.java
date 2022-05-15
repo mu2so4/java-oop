@@ -3,18 +3,18 @@ package mur.lab2.calculator;
 import mur.lab2.operator.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.logging.*;
 
 public class Calculator {
     private final Context context = new Context();
     private final Map<String, Operator> operators;
-    private final Logger calculatorLogger = Logger.getLogger(Calculator.class.getCanonicalName());
+    private static final Logger calculatorLogger = Logger.getLogger(Calculator.class.getCanonicalName());
 
     public Calculator(String configResource)
             throws IOException {
         operators = OperatorFactory.loadCommandsFromResource(configResource);
-        //calculatorLogger.removeHandler(calculatorLogger.getHandlers()[0]);
     }
 
     Operator getOperator(String commandName) throws NoSuchOperatorException {
@@ -32,10 +32,10 @@ public class Calculator {
         try {
             operator = getOperator(commandName);
             result = operator.run(context, query.getArgs());
-            calculatorLogger.info(String.format("%s\tperformed with result %f", commandName, result));
+            calculatorLogger.info(String.format("%s:\tperformed with result %f", commandName, result));
         }
         catch(OperatorException e) {
-            calculatorLogger.log(Level.SEVERE, commandName, e);
+            calculatorLogger.log(Level.SEVERE, String.format("%s:\t%s", commandName, e.getMessage()));
         }
         return result;
     }
