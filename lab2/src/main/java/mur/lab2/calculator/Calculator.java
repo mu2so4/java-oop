@@ -2,8 +2,7 @@ package mur.lab2.calculator;
 
 import mur.lab2.operator.*;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Map;
 import java.util.logging.*;
 
@@ -32,10 +31,11 @@ public class Calculator {
         try {
             operator = getOperator(commandName);
             result = operator.run(context, query.getArgs());
-            calculatorLogger.info(String.format("%s:\tperformed with result %f", commandName, result));
+            double finalResult = result;
+            calculatorLogger.info(() -> String.format("%s:\tperformed with result %f", commandName, finalResult));
         }
         catch(OperatorException e) {
-            calculatorLogger.log(Level.SEVERE, String.format("%s:\t%s", commandName, e.getMessage()));
+            calculatorLogger.severe(() -> String.format("%s:\t%s", commandName, e.getMessage()));
         }
         return result;
     }

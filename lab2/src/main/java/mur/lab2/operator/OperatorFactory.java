@@ -18,12 +18,15 @@ public class OperatorFactory {
                     if(command == null)
                         break;
                     operators.put(command.getCommandName(), newInstance(command.getFullClassName()));
-                    factoryLogger.info(String.format("%s\tloaded as %s",
-                            command.getFullClassName(), command.getCommandName()));
+                    Command finalCommand = command;
+                    factoryLogger.info(() -> String.format("%s\tloaded as %s",
+                            finalCommand.getFullClassName(), finalCommand.getCommandName()));
                 }
                 catch(Exception e) {
-                    factoryLogger.log(Level.SEVERE, String.format("%s: %s", e.getClass().getCanonicalName(), e.getMessage()));
+                    factoryLogger.severe(() ->
+                            String.format("%s: %s", e.getClass().getCanonicalName(), e.getMessage()));
                 }
+                
             }
         }
         return operators;
